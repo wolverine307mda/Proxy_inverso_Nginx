@@ -1,0 +1,31 @@
+server {
+    listen 80;
+    listen [::]:80;
+
+    root /var/www/html/; # Ruta de la carpeta raíz del dominio
+    index index.html; # Archivo por defecto
+
+    # Configuración para la raíz
+    location / {
+        try_files $uri $uri/ /index.html; # Intenta servir el archivo solicitado, si no existe, sirve
+    }
+
+    # Configuración para /mario
+    location /mario {
+        alias /var/www/html/mario.com;
+    }
+
+    # Personalizar la página de error 404
+    error_page 404 /404.html;
+    location = /404.html {
+        root /var/www/html/mario.com/errors; # Ruta donde se encuentra el archivo de error
+        internal; # Asegura que la página de error no sea accesible directamente
+    }
+
+    # la página de error 500
+    error_page 500 502 503 504 /500.html;
+    location = /500.html {
+        root /var/www/html/mario.com/errors; # Ruta donde se encuentra el archivo de error
+        internal; # Asegura que la página de error no sea accesible directamente
+    }
+}
